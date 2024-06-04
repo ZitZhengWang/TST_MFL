@@ -1,0 +1,15 @@
+.DS_Store
+.settings/
+.classpath
+.project
+
+
+
+*.iml
+
+.idea
+
+# 忽略保存的模型文件
+*.pth
+
+*/__pycache__/*

@@ -1,0 +1,66 @@
+train_dataset: image_folder_pretrain
+train_dataset_args: {
+    root_path: /home/zit/21class/ZhengWang/Datasets/Caltech-UCSD Birds-200 2011/CUB_200_2011/images,
+    split: train,
+    image_size: 84,
+    patch_size: 26,
+    patch_num: 36,
+    augment: Crop_Resize,
+    local_augment: local_Resize}
+
+val_dataset: image_folder_pretrain
+val_dataset_args: {
+    root_path: /home/zit/21class/ZhengWang/Datasets/Caltech-UCSD Birds-200 2011/CUB_200_2011/images,
+    split: val,
+    image_size: 84,
+    patch_size: 26,
+    patch_num: 36,
+    local_augment: local_Crop}
+
+tval_dataset: image_folder_pretrain
+tval_dataset_args: {
+    root_path: /home/zit/21class/ZhengWang/Datasets/Caltech-UCSD Birds-200 2011/CUB_200_2011/images,
+    split: test,
+    image_size: 84,
+    patch_size: 26,
+    patch_num: 36,
+    local_augment: local_Crop}
+
+# 模型参数
+model: FusionNetV4
+model_args:
+    globalNet: GlobalNetV4
+    globalNet_args: {
+                        encoder: resnet12,
+                        encoder_args: {},
+    }
+    localNet: LocalNetV4
+    localNet_args: {
+                       encoder: resnet12,
+                       encoder_args: {},
+                       classifier: localPatchClassifierV2,
+                       classifier_args: {neighbor_k: 5},
+                       input_dim: 512,
+                       head_num: 8,
+                       feedforward_dim: 512,
+                       batch_first: True,
+                       use_BGF: False,
+    }
+
+# 加载模型路径
+#load_encoder: save/FusionNet_exp3/max-va.pth
+
+# 小样本参数
+n_way: 5
+n_query: 15
+train_batches: 600
+ep_per_batch: 1
+
+# 训练参数
+gpu: 0
+num_workers: 16
+max_epoch: 30
+optimizer: adam
+optimizer_args: {lr: 0.0001}
+
+visualize_datasets: False
